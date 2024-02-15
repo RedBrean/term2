@@ -1,17 +1,29 @@
 #include <iostream>
-#include <math.h>
-#include <vector>
 
 using namespace std;
 
-int NOD(int x, int y){
-    
-}
-
-int main()
+void solve(int a, int b, int c, int& x, int& y)
 {
-    int a,b,c,x,y;
-    cin >> a >> b >> c;
+    bool sw = false;
+    if(a>b){
+        auto temp = a;
+        a = b;
+        b = temp;
+        sw = true;
+    }
 
-
+    x = 0; y = 0;
+    for (int i = 0; i<abs(b); i++){
+        if((i*a - c) % b == 0)
+        {
+            x = i;
+            y = -(i*a-c)/b;
+        }
+    }   
+    if(sw){        
+        auto temp = x;
+        x = y;
+        y = temp;
+    }
 }
+
