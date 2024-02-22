@@ -4,12 +4,13 @@
 #include <chrono>
 #include <ctime>
 #include <fstream>
+#include <algorithm>
 
 using std::vector;
 using std::cout;
 using std::cin;
 
-vector<int> random_vector(int N)
+vector<int> random_vector_sorted(int N)
 {
     std::srand(std::time(0));
     vector<int> output(N);
@@ -17,6 +18,7 @@ vector<int> random_vector(int N)
     {
         output[i] = std::rand();
     }
+    std::sort(output.begin(), output.end());
     return output;
 }
 
@@ -38,13 +40,31 @@ int poisk(vector<int> vec, int value)
     }
     return -1;
 }
-
+int bin_poisk(vector<int>vec, int value)
+{
+    int a, b;
+    a = 0;
+    b = vec.size()-1;
+    int c = (a+b)/2;
+    while(b-a > 1)
+    {
+        c = (a+b)/2;
+        if(vec.at(c)==value)
+        {return c;}
+        else if(vec.at(c)>value)
+        {b = c;}
+        else {a = c;}  
+    }
+    if(b-a == 1 && vec.at(b) == value){return b;}
+    return -1;
+}
 int calc_time(int N)
 {
-    auto begin = std::chrono::steady_clock::now();
-    auto vec = random_vector(N);
+    auto vec = random_vector_sorted(N);
 
-    poisk(vec, std::rand());
+    auto begin = std::chrono::steady_clock::now();
+
+    bin_poisk(vec, std::rand());
 
     auto end = std::chrono::steady_clock::now();
     auto time_span = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
@@ -56,7 +76,7 @@ int main()
     int N;
     cin >> N;
     std::ofstream output_file;
-    output_file.open("simpl_poisk.csv");
+    output_file.open("bin_poisk.csv");
     output_file<<"N,t\n";
     for (int i = 0; i<N; i++)
     {
