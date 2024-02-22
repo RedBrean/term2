@@ -3,6 +3,7 @@
 #include <random>
 #include <chrono>
 #include <ctime>
+#include <fstream>
 
 using std::vector;
 using std::cout;
@@ -38,12 +39,22 @@ int poisk(vector<int> vec, int value)
     return -1;
 }
 
+int calc_time(int N)
+{
+    auto begin = std::chrono::steady_clock::now();
+    auto vec = random_vector(N);
+
+    poisk(vec, std::rand());
+
+    auto end = std::chrono::steady_clock::now();
+    auto time_span = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+    return time_span.count();
+}
+
 int main()
 {
     int N;
     cin >> N;
-    auto vec = random_vector(N);
-    
-
+    cout << calc_time(N) << "\n";
 
 }
