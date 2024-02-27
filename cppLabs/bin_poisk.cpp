@@ -61,10 +61,18 @@ int bin_poisk(vector<int>vec, int value)
 int calc_time(int N)
 {
     auto vec = random_vector_sorted(N);
-
+    auto value = std::rand();
+    for(int i=0; i<vec.size(); i++)
+    {
+        if(vec[i] == value)
+        {
+            vec[i]++;
+        }
+    }
     auto begin = std::chrono::steady_clock::now();
 
-    bin_poisk(vec, std::rand());
+    cout << bin_poisk(vec, value) << " ";
+    
 
     auto end = std::chrono::steady_clock::now();
     auto time_span = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
@@ -80,7 +88,7 @@ int main()
     output_file<<"N,t\n";
     for (int i = 0; i<N; i++)
     {
-        auto n = (std::rand()%500000);
+        auto n = (std::rand()%1000000);
         auto time = calc_time(n);
         output_file << n << ", " << time << "\n";
         cout << "N = " << i << "\n";
