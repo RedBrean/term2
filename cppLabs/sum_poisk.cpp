@@ -106,7 +106,7 @@ int main()
     output_file<<"N,t\n";
     for (int i = 0; i<N; i++)
     {
-        auto n = (std::rand()%1000000);
+        auto n = (std::rand()%20000);
         auto time = calc_time(n);
         cout << "N = " << i << "\n";
         output_file << n << ", " << time << "\n";
