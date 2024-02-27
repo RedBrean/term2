@@ -40,7 +40,7 @@ int poisk(vector<int> vec, int value)
     }
     return -1;
 }
-int bin_poisk(vector<int>vec, int value)
+int bin_poisk(vector<int> &vec, int value)
 {
     int a, b;
     a = 0;
@@ -58,7 +58,7 @@ int bin_poisk(vector<int>vec, int value)
     if(b-a == 1 && vec.at(b) == value){return b;}
     return -1;
 }
-int calc_time(int N)
+int calc_time(int N, int nStat = 100000)
 {
     auto vec = random_vector_sorted(N);
     auto value = std::rand();
@@ -70,12 +70,14 @@ int calc_time(int N)
         }
     }
     auto begin = std::chrono::steady_clock::now();
-
-    cout << bin_poisk(vec, value) << " ";
+    for (int i = 0; i < nStat; i++)
+    {    
+        bin_poisk(vec, value);
+    }
     
 
     auto end = std::chrono::steady_clock::now();
-    auto time_span = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    auto time_span = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin)/nStat;
     return time_span.count();
 }
 
@@ -88,11 +90,12 @@ int main()
     output_file<<"N,t\n";
     for (int i = 0; i<N; i++)
     {
-        auto n = (std::rand()%1000000);
+        auto x = (double)std::rand()/RAND_MAX;
+        auto n = (int) pow(10, (x*6.5));
+        
         auto time = calc_time(n);
         output_file << n << ", " << time << "\n";
-        cout << "N = " << i << "\n";
+        cout << "N = " << i << ", n = " << n << "\n";
     }
-
     return 0;
 }
