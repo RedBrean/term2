@@ -22,6 +22,17 @@ vector<int> random_vector_sorted(int N)
     return output;
 }
 
+vector<int> random_vector(int N)
+{
+    std::srand(std::time(0));
+    vector<int> output(N);
+    for(int i = 0; i<N; i++)
+    {
+        output[i] = std::rand();
+    }
+    return output;
+}
+
 void vector_print(vector<int> vec)
 {
     cout << "[";
@@ -58,13 +69,50 @@ int bin_poisk(vector<int>vec, int value)
     if(b-a == 1 && vec.at(b) == value){return b;}
     return -1;
 }
+void sum_poisk(vector<int>vec, int value)
+{
+    for(int i = 0; i < vec.size(); i++)
+    {
+        for(int j = 0; j<vec.size(); j++)
+        {
+            if(vec.at(i) + vec.at(j) == value){
+                cout << "find " << vec.at(i) << " + " << vec.at(j) << " = " << value << "\n";
+                return; 
+            }
+        }
+    }
+    return;
+}
+void sum_poisk_bin(vector<int>vec, int value)
+{
+    int left, right;
+    left = 0;
+    right = vec.size()-1;
+    while(right>=left)
+    {
+        if(vec.at(left) + vec.at(right) > value)
+        {
+            right--;
+        }
+        else if(vec.at(left) + vec.at(right) < value)
+        {
+            left++;
+        }
+        else
+        {
+                cout << "find " << vec.at(left) << " + " << vec.at(right) << " = " << value << "\n";
+                return; 
+        }
+
+    }
+}
 int calc_time(int N)
 {
     auto vec = random_vector_sorted(N);
 
     auto begin = std::chrono::steady_clock::now();
 
-    bin_poisk(vec, std::rand());
+    sum_poisk_bin(vec, std::rand());
 
     auto end = std::chrono::steady_clock::now();
     auto time_span = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
@@ -76,14 +124,14 @@ int main()
     int N;
     cin >> N;
     std::ofstream output_file;
-    output_file.open("bin_poisk.csv");
+    output_file.open("sum_poisk_bin.csv");
     output_file<<"N,t\n";
     for (int i = 0; i<N; i++)
     {
-        auto n = (std::rand()%500000);
+        auto n = (std::rand()%100000);
         auto time = calc_time(n);
-        output_file << n << ", " << time << "\n";
         cout << "N = " << i << "\n";
+        output_file << n << ", " << time << "\n";
     }
 
     return 0;
