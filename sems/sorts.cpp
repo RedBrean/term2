@@ -122,19 +122,29 @@ void bubble_sort(vector<int> &vec)
 void quick_sort(vector<int> &vec, int start = 0, int end = -1)
 {
     if(end == -1){end  = vec.size();}
-    if(end - start < 4){
+    if(end - start <= 0){
+        return;
+    }
+    else if(end - start < 4){
         selection_sort(vec, start, end);
+
         return;
     }
     auto pivot_index = (start+end)/2;
     auto pivot = vec[pivot_index];
     auto i = start;
+    if(end <= 0){return;}
     auto j = end-1;
-    while(i < j)
+    
+    while(i <= j)
     {
-        if(vec[i]<=pivot && i<pivot_index){i++;}
-        else if(vec[j]>=pivot && j>pivot_index){j--;}
-        else{std::swap(vec[i], vec[j]);}
+        if(vec[i]<=pivot){i++;}
+        else if(vec[j]>=pivot){j--;}
+        else{
+            std::swap(vec[i], vec[j]);
+            i++;
+            j--;
+        }
     }
     auto mid = i;
     quick_sort(vec, start, mid);
