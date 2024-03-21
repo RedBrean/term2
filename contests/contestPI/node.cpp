@@ -73,6 +73,28 @@ void print_list(Node* head_ref){
     std::cout << "\n";
 }
 
+void remove_key(Node*& head_ptr, int key){
+    auto prev = head_ptr;
+    auto next = head_ptr;
+
+    if(next == nullptr){return;}
+    while(next!=nullptr){
+        if(next->key == key){
+            if(next != head_ptr){
+                prev->next = next->next;
+            }
+            else{
+                head_ptr = next->next;
+            }
+            delete next;
+            return;
+        }
+        auto temp = next;
+        next = prev->next;
+        prev = temp;
+    }
+}
+
 Node* find(Node* head_ref, int key){
     if(head_ref == nullptr){return nullptr;}
     Node* current = head_ref;
@@ -86,12 +108,15 @@ Node* find(Node* head_ref, int key){
 }
 
 int main() {
-  Node* HEAD = nullptr, *current = nullptr;
+  Node* HEAD = nullptr;
   push_back(HEAD, 0);
   push_back(HEAD, 1);
   push_back(HEAD, 2);
-  current = find(HEAD, 2);
-  if (current->key == 2) {
+  remove_key(HEAD, 0);
+  remove_key(HEAD, 1);
+  remove_key(HEAD, 2);
+  remove_key(HEAD, 3);
+  if (HEAD == nullptr) {
     cout << "OK" << endl;
   }
   return 0;
