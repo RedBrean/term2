@@ -250,6 +250,6 @@ int main()
 {
     auto vec = random_vector(10);
     vector_print(vec);
-    quick_sort(vec);
+    heap_sort(vec);
     vector_print(vec);
 }
