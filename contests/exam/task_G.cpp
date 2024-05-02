@@ -16,8 +16,12 @@ bool pattern_match(char const *pattern, char const *str)
     int j = 0;
     while (true)
     {   
-        if(pattern[i] == '0'){return(str[j] == '0');}
-        if(str[j] == '0'){return(pattern[i] == '0');}
+        if(pattern[i] == '\0'){
+            return(str[j] == '\0');
+            }
+        if(str[j] == '\0'){
+            return(pattern[i] == '\0' || pattern[i+1] == '\0'); 
+            }
         char symb = pattern[i];
         if(symb == '+'){
             i++;
@@ -27,7 +31,7 @@ bool pattern_match(char const *pattern, char const *str)
         if(inf){
             while(str[j] == symb){
                 j++;
-                if(str[j] == '0'){
+                if(str[j] == '\0'){
                     break;
                 }
             }
@@ -43,5 +47,6 @@ bool pattern_match(char const *pattern, char const *str)
 
 int main()
 {
-    cout << pattern_match("a+b+0","aaaabbbbb0");
+    cout << pattern_match("a+b+","aaaabbbbb");
+    cout << pattern_match("a+b", "aaaaaaaaaaaaaa");
 }

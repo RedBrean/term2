@@ -110,7 +110,6 @@ int main()
     cout << "сортируем......\n";
     heap_print(heap);
 
-
 }
 
 

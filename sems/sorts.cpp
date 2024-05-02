@@ -122,12 +122,11 @@ void bubble_sort(vector<int> &vec)
 void quick_sort(vector<int> &vec, int start = 0, int end = -1)
 {
     if(end == -1){end  = vec.size();}
-    if(end - start <= 0){
+    if(end - start <= 1){
         return;
     }
     else if(end - start < 4){
         selection_sort(vec, start, end);
-
         return;
     }
     auto pivot_index = (start+end)/2;
@@ -138,8 +137,8 @@ void quick_sort(vector<int> &vec, int start = 0, int end = -1)
     
     while(i <= j)
     {
-        if(vec[i]<=pivot){i++;}
-        else if(vec[j]>=pivot){j--;}
+        if(vec[i]<pivot){i++;}
+        else if(vec[j]>pivot){j--;}
         else{
             std::swap(vec[i], vec[j]);
             i++;
@@ -150,6 +149,101 @@ void quick_sort(vector<int> &vec, int start = 0, int end = -1)
     quick_sort(vec, start, mid);
     quick_sort(vec, mid, end);
     return;
+}
+
+void merge_sort(vector<int> &vec, int start = 0, int end = -1)
+{
+    if(end == -1) {end = vec.size();}
+    if(end - start <= 0){return;}
+    else if(end - start <= 4) {
+        selection_sort(vec, start, end);
+        return;
+    }
+    auto slice_index = (start+end)/2;
+    merge_sort(vec, start, slice_index);
+    merge_sort(vec, slice_index, end);
+    vector<int> buffer(end-start);
+    for(int i = start; i<end; i++)
+    {
+        buffer[i-start] = vec[i];
+    }
+
+    int l,r;
+    l = 0;
+    r = slice_index-start;
+    for(int i = start; i<end; i++)
+    {
+        if(l<slice_index-start && buffer[l]<=buffer[r])
+        {
+            vec[i] = buffer[l];
+            l++;
+//            if(l == slice_index-start) {r++;}
+        }
+        else if(r<end-start && buffer[l]>=buffer[r])
+        {
+            vec[i] = buffer[r];
+            r++;
+//          if(r == end-start) {l++;}
+        }
+    }
+
+
+
+}
+
+struct Heap
+{
+    vector<int> *vec_pointer;
+    int size;
+    vector<int>& vec()
+    {return *vec_pointer;} 
+};
+
+void add_value_to_heap(Heap& heap, int value)
+{
+    if(heap.vec().size() == heap.size)
+    {
+        int new_size = 1;
+        while(new_size <= heap.size)
+        {
+            new_size*=2;
+            new_size++;
+        }
+        heap.vec().resize(new_size);
+    }
+    heap.vec()[heap.size] = value;
+    int i = heap.size;
+    while(heap.vec()[i] > heap.vec()[(i-1)/2] & i > 0)
+    {
+        std::swap(heap.vec()[i], heap.vec()[(i-1)/2]);
+        i = (i-1)/2;
+    }
+    heap.size++;
+}
+
+void heapify(Heap &heap)
+{
+   int old_size = heap.size;
+   heap.size = 0;
+   for(int i = 0; i < old_size; i++)
+   {
+        add_value_to_heap(heap, heap.vec()[i]);
+   }
+}
+
+void heap_sort(vector<int> &vec)
+{
+    Heap heap;
+    heap.size = vec.size();
+    heap.vec_pointer = &vec;
+    heapify(heap);
+    for(int i = vec.size()-1; i>=0; i--)
+    {
+        std::swap(vec[0], vec[i]);
+        heap.size = heap.size-1;
+        heapify(heap);
+    }
+
 }
 
 int main()
