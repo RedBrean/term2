@@ -8,13 +8,13 @@ epsilon = 20
 sigma = 0.05
 mouse_forse = 1*10**-4
 mouse_forse_k = 0
-gravity_force = 0.0
+gravity_force = 0.5
 
 dT = [10**-6, 10**-5, 5*10**-5, 10**-4, 5*10**-4, 8*10**-4, 10**-3, 10**-3, 10**-3, 10**-3]
 nT = [4,      4,      8,        4,      8,        16,       2,      6,     10,      15]
 iT = 0
 
-T_stab = 600
+T_stab = 20
 
 k_tr = 0.00
 k_otr = 1
