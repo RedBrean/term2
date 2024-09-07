@@ -1,0 +1,3 @@
+/home/redbrean/term2/term3/sems/sem20240907/task1/build/CMakeFiles/main.dir
+/home/redbrean/term2/term3/sems/sem20240907/task1/build/CMakeFiles/edit_cache.dir
+/home/redbrean/term2/term3/sems/sem20240907/task1/build/CMakeFiles/rebuild_cache.dir
