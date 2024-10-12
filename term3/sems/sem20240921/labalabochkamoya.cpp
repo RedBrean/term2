@@ -6,6 +6,7 @@ class AbstractDice{
     public:
         virtual unsigned roll() = 0;
         AbstractDice(){}
+        virtual ~AbstractDice(){}
 };
 
 class Dice : public AbstractDice{
@@ -33,7 +34,12 @@ class ThreeDicePool : public AbstractDice{
             dices[1] = new Dice(max,seed_2);
             dices[2] = new Dice(max,seed_3);
         }
-        
+        ThreeDicePool(AbstractDice& dice1, AbstractDice& dice2, AbstractDice& dice3)
+        {
+            dices[0] = &dice1;
+            dices[1] = &dice2;
+            dices[2] = &dice3;
+        }
         unsigned roll() override{
             return dices[0]->roll() + dices[1]->roll() + dices[2]->roll();
         }
