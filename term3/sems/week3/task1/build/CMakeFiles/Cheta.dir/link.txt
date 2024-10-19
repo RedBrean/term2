@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Cheta.dir/main.cpp.o CMakeFiles/Cheta.dir/utils.cpp.o -o Cheta 
