@@ -11,6 +11,8 @@ double Vector3D::length_squared()
 { return x*x + y*y + z*z; }
 double Vector3D::length()
 { return std::sqrt(length_squared()); }
+Vector3D Vector3D::normalize()
+{ return *this/this->length(); }
 
 // Операторы присваивания
 Vector3D& Vector3D::operator+= (Vector3D& second) {
