@@ -16,6 +16,7 @@ public:
     //Методы
     double length();
     double length_squared();
+    Vector3D normalize();
 
     // Дружественный оператор для вывода
     friend std::ostream& operator<<(std::ostream& os, const Vector3D& point);
@@ -40,8 +41,18 @@ Vector3D operator||(const Vector3D&  vec, const Vector3D&  vec2);
 class Ray{
     public: 
         Vector3D at(double t);
-        Ray(const Vector3D& A, const Vector3D& b);
+        Vector3D begin();
+        Vector3D direction();
+        Vector3D direction_normalized();
+        
+        /*A - начало луча, b - направление*/
+        Ray(const Vector3D& A, const Vector3D& b); 
+    
+        // Дружественный оператор для вывода
+        friend std::ostream& operator<<(std::ostream& os, const Ray& ray);
+ 
+
     private:
         Vector3D A;
         Vector3D b;
-}
+};
