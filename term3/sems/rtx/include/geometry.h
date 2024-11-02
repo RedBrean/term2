@@ -1,6 +1,7 @@
 #pragma once
 #include <ostream>
 
+
 class Vector3D {
 public:
     // Конструкторы
@@ -14,9 +15,9 @@ public:
     Vector3D& operator/= (double value);
 
     //Методы
-    double length();
-    double length_squared();
-    Vector3D normalize();
+    double length() const;
+    double length_squared() const;
+    Vector3D normalize() const;
 
     // Дружественный оператор для вывода
     friend std::ostream& operator<<(std::ostream& os, const Vector3D& point);
@@ -40,10 +41,10 @@ Vector3D operator||(const Vector3D&  vec, const Vector3D&  vec2);
 
 class Ray{
     public: 
-        Vector3D at(double t);
-        Vector3D begin();
-        Vector3D direction();
-        Vector3D direction_normalized();
+        Vector3D at (double t) const;
+        Vector3D begin() const;
+        Vector3D direction() const;
+        Vector3D direction_normalized() const;
         
         /*A - начало луча, b - направление*/
         Ray(const Vector3D& A, const Vector3D& b); 
@@ -56,3 +57,6 @@ class Ray{
         Vector3D A;
         Vector3D b;
 };
+
+
+using Color = Vector3D;
