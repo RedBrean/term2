@@ -7,11 +7,11 @@ Vector3D::Vector3D() : x(0), y(0), z(0) {}
 
 Vector3D::Vector3D(double x, double y, double z) : x(x), y(y), z(z) {}
 
-double Vector3D::length_squared()
+double Vector3D::length_squared() const
 { return x*x + y*y + z*z; }
-double Vector3D::length()
+double Vector3D::length() const
 { return std::sqrt(length_squared()); }
-Vector3D Vector3D::normalize()
+Vector3D Vector3D::normalize() const
 { return *this/this->length(); }
 
 // Операторы присваивания
