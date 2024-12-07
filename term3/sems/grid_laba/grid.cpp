@@ -1,7 +1,109 @@
 #include <cassert>
-#include <vector>
+#include <iostream>
 template<typename T, unsigned dim = 2>
 class Grid;
+
+template<typename T>
+class Grid<T, 2>
+{
+public:
+    using value_type = T;
+    using size_type = unsigned;
+private:
+    T* data;
+    size_type y_size, x_size;
+public:
+    Grid(T *data , size_type y_size , size_type x_size)
+    : data(data)
+    , y_size(y_size)
+    , x_size(x_size)
+    {
+    }
+
+    Grid(T const &t) : y_size(1), x_size(1)
+    {
+        data = new T[1];
+        *data = t;
+    }
+    Grid(size_type y_size, size_type x_size) : data(new T[x_size*y_size]), x_size(x_size), y_size(y_size)
+    {
+        for (auto it = data, end = data + x_size * y_size; it != end; ++it) {
+            *it = T();
+        }
+    }
+
+    Grid(size_type y_size, size_type x_size, T const &t) : data(new T[x_size*y_size]), x_size(x_size), y_size(y_size)
+    {
+        for (auto it = data, end = data + x_size * y_size; it != end; ++it){
+            *it = t;
+        }
+    }
+
+    Grid(Grid<T> const& other) : data(new T[x_size*y_size]), x_size(x_size), y_size(y_size){
+        for(size_type x_idx = 0; x_idx!=x_size; x_idx++){
+        for(size_type y_idx = 0; y_idx!=y_size; y_idx++)
+        {
+            data(y_idx,x_idx) = other(y_idx, x_idx);
+        }
+        }
+    }
+    Grid(Grid<T>&& other)  : data(other.data), x_size(other.x_size), y_size(other.y_size) {
+        other.data = nullptr;        
+    }
+
+    ~Grid(){
+        delete[] data;
+    }
+
+
+    Grid<T>& operator=(Grid<T>& other){
+        x_size = other.x_size;
+        y_size = other.y_size;
+        data = new T[x_size*y_size];
+        for(size_type x_idx = 0; x_idx!=x_size; x_idx++){
+        for(size_type y_idx = 0; y_idx!=y_size; y_idx++)
+        {
+            data(y_idx,x_idx) = other(y_idx, x_idx);
+        }
+        }
+    }
+    Grid<T>& operator=(Grid<T>&& other){
+        x_size = other.x_size;
+        y_size = other.y_size;
+        data = new T[x_size*y_size];
+        for(size_type x_idx = 0; x_idx!=x_size; x_idx++){
+        for(size_type y_idx = 0; y_idx!=y_size; y_idx++)
+        {
+            data(y_idx,x_idx) = other(y_idx, x_idx);
+        }
+        }
+    }
+
+    T* operator[](size_type y_idx)
+    {
+        return &data[x_size*y_idx];
+    }
+
+    const T& operator()(size_type y_idx , size_type x_idx) const
+    {
+        return data[y_idx * x_size + x_idx];
+    }
+
+    T& operator()(size_type y_idx, size_type x_idx)
+    {
+        return data [y_idx * x_size + x_idx];
+    }
+
+    Grid<T>& operator=(T const& t)
+    {
+        for (auto it = data, end = data + x_size * y_size; it != end; ++it) *it = t;
+        return *this;
+    }
+
+    size_type get_y_size() const { return y_size; }
+    size_type get_x_size() const { return x_size; }
+};
+
 
 template<typename T>
 class Grid<T, 1>
@@ -17,6 +119,12 @@ public:
     : data(data)
     , size(size)
     {
+    }
+
+    Grid()
+    {
+        data = nullptr;
+        size = 0;
     }
 
     Grid(T const &t)
@@ -53,6 +161,20 @@ public:
     }
 
 
+    bool operator>(const Grid<T,1>& other) const{
+        T sum1 = 0,sum2 = 0;
+        for(int i=0;i!=size;i++)
+        {
+            sum1+= (*this)[i];
+        } 
+        for(int i=0;i!=other.size;i++)
+        {
+            sum2+= (*this)[i];
+        } 
+        return sum1>sum2;
+
+    }
+
     Grid<T>& operator=(Grid<T>& other){
         size = other.size;
         data = new T[size];
@@ -68,10 +190,16 @@ public:
         }
     }
 
-    T operator[](size_type idx)
+    T& operator[](size_type idx)
     {
-        return &data[idx];
+        return data[idx];
     }
+
+    const T& operator[](size_type idx) const
+    {
+        return data[idx];
+    }
+
 
     T operator()(size_type idx) const
     {
@@ -99,18 +227,27 @@ class Grid
         using value_type = T;
         using size_type = unsigned;
     private:
-        std::vector<Grid<T,dim-1>> vec_grid;
+        Grid<Grid<T,dim-1>,1> grid_gridov;
+
     public:
     template<typename... Suki>
     Grid(size_type size_last, Suki ...suki) 
     {
-        vec_grid = std::vector<Grid<T,dim-1>(size_last, Grid<T,dim-1>(suki...));
+        grid_gridov = Grid<Grid<T,dim-1>,1>(size_last, Grid<T,dim-1>(suki...));
     }
     
-    
-    auto& operator[](size_type idx)
+    Grid()
     {
-        return *grid_gridov[idx];
+        grid_gridov = Grid<T,dim-1>();
+    }
+    
+    Grid<T, dim-1>& operator[](size_type idx)
+    {
+        return grid_gridov[idx];
+    }
+    const Grid<T, dim-1>& operator[](size_type idx) const
+    {
+        return grid_gridov[idx];
     }
 
     template<typename... Suki>
@@ -154,6 +291,14 @@ int main()
     for(gsize_t y_idx = 0; y_idx != g.get_y_size(); ++y_idx)
     for(gsize_t x_idx = 0; x_idx != g.get_x_size(); ++x_idx)
         assert(1.0f == g(y_idx , x_idx));
+
+    Grid<float,1> lev = Grid<float,1>(10u);
+    Grid<float,1> prav = Grid<float,1>(10u);
+    lev[2] = 54;
+    prav[1] = 22;
+    prav[5] = 52;
+    std::cout << (lev>prav);
+    
 
     Grid<float, 3> const g3(2, 3, 4, 1.0f);
     assert(1.0f == g3(1, 1, 1));
