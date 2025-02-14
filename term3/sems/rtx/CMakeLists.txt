@@ -15,8 +15,9 @@ include_directories(src)
 #собираем геометрию
 add_library(geometry STATIC src/vec3.cpp src/ray.cpp)
 #визуал тоже, че нам
-add_library(camera STATIC src/camera.cpp)
 
-add_executable(RTX src/main.cpp)
-target_link_libraries(RTX geometry camera)
+add_executable(RTX src/main.cpp src/camera.cpp src/ray.cpp src/scene.cpp src/vec3.cpp)
+
+
+
 

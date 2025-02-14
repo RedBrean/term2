@@ -1,5 +1,9 @@
 #include <camera.h>
 #include <image.h>
+#include <geometry.h>
+
+#include <vector>
+
 Camera::Camera(double aspect_ratio, int image_width, double focal_length)
     : image_width(image_width), focal_length(focal_length), origin(Vector3D(0, 0, 0)),
       viewport_height(2.0), viewport_width(viewport_height * aspect_ratio)
@@ -15,24 +19,23 @@ Ray Camera::get_ray(int x, int y) const {
                (y + 0.5) * vertical / image_height - origin);
 }
 
-Image Camera::get_image() const {
+void Camera::get_image(Image& image) const {
     {
-        Color** pixels = new Color*[image_width];
+        std::vector<std::vector<Color>> pixels(image_width);
         for(int i = 0; i<image_width; i++)
         {
-            pixels[i] = new Color[image_height];
+            pixels[i] = std::vector<Color>(image_height);
             for(int j = 0; j<image_height; j++)
             {
                 pixels[i][j] = ray_color(get_ray(i,j));
             }
 
         }
-        return Image(image_width, image_height, pixels);
+        image.width = image_width;
+        image.height = image_height;
+        image.pixels = pixels;
     }
 }
 
-Color ray_color(const Ray& ray) {
-    Vector3D unit_direction = ray.direction_normalized();
-    double a = 0.5 * (unit_direction.y + 1.0);
-    return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
-}
+
+

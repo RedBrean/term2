@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 int main()
 {
@@ -7,19 +8,8 @@ int main()
 
     std::ofstream out_file("out_2.md");
 
-    char* buffer_ptr = new char;
-
-    int* int_buffer = new int;
-    file.read(reinterpret_cast<char*>(int_buffer), 4);
-    std::cout << *int_buffer << std::endl;
-
-    while(file)
-    {
-        file.read(buffer_ptr, 1);
-    }
-
-    delete buffer_ptr;
-
+    u_int32_t length;
+    file.read()
 
     file.close();
     out_file.close();
